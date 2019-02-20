@@ -1,45 +1,52 @@
 'use strict';
 
-const filters = [
-  {label: `all`, checked: true},
-  {label: `overdue`, disabled: true},
-  {label: `today`, disabled: true},
-  {label: `favorites`},
-  {label: `repeating`},
-  {label: `tags`},
-  {label: `archive`},
-];
 
 const getRandomInteger = (max) => Math.floor(Math.random() * max);
+const MAX_TASKS_NUMBER = 100;
+const INITIAL_CARDS_NUMBER = 7;
 
-const prepareOneFilterString = (label, checked = false, disabled = false) =>
+const filters = [
+  {label: `all`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
+  {label: `overdue`, quantity: 0},
+  {label: `today`, quantity: 0},
+  {label: `favorites`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
+  {label: `repeating`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
+  {label: `tags`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
+  {label: `archive`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
+];
+
+const prepareOneFilterString = (label, quatity, index) =>
   `
   <input type="radio"
          id="filter__${label}"
          class="filter__input visually-hidden"
          name="filter"
-         ${checked ? `checked` : ``}
-         ${disabled ? `disabled` : ``}
+         ${index === 0 ? `checked` : ``}
+         ${quatity === 0 ? `disabled` : ``}
   />
   <label for="filter__${label}" 
          class="filter__label">
        ${label} 
-      <span class="filter__${label}-count">${getRandomInteger(100)}</span>
+      <span class="filter__${label}-count">${quatity}</span>
   </label>
 `;
 
 const filtersString = filters
-  .map((filter) => prepareOneFilterString(filter.label, filter.checked, filter.disabled))
+  .map((filter, index) => prepareOneFilterString(filter.label, filter.quantity, index))
   .reduce((resultingString, oneFilterString) => resultingString + oneFilterString);
 
 const filtersElement = document.querySelector(`.main__filter`);
 filtersElement.insertAdjacentHTML(`beforeEnd`, filtersString);
 
-const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = true, repeat = true, text = `this is a demo card`, hashTags = true, image = true) => `
+const prepareOneCardString = (
+    id,
+    isEdit = false,
+    color = `green`,
+    deadline = true,
+    text = `this is a demo card`) => `
 <article class="card card--${color}
                 ${isEdit ? `card--edit` : ``}
-                ${deadline ? `card--deadline` : ``}
-                ${repeat ? `card--repeat` : ``}">
+                ${deadline ? `card--deadline` : ``}>
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -99,10 +106,10 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">${repeat ? `yes` : `no`} </span>
+                repeat:<span class="card__repeat-status">no</span>
                 </button>
 
-                <fieldset class="card__repeat-days" ${repeat ? `` : `disabled`} >
+                <fieldset class="card__repeat-days" disabled >
                     <div class="card__repeat-days-inner">
                       <input
                         class="visually-hidden card__repeat-day-input"
@@ -183,7 +190,6 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list" >
-                    ${hashTags ? `
                     <span class="card__hashtag-inner">
                       <input
                         type="hidden"
@@ -227,7 +233,7 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
                       <button type="button" class="card__hashtag-delete">
                         delete
                       </button>
-                    </span>` : ``}
+                    </span>
                   </div>
 
                   <label>
@@ -241,7 +247,6 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
                 </div>
               </div>
               
-              ${image ? `
               <label class="card__img-wrap">
                     <input
                       type="file"
@@ -253,9 +258,8 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
                       alt="task picture"
                       class="card__img"
                     />
-                  </label>
-              ` : `
-              <label class="card__img-wrap card__img-wrap--empty">
+              </label>
+              <label class="card__img-wrap card__img-wrap--empty" hidden>
                 <input
                   type="file"
                   class="card__img-input visually-hidden"
@@ -266,8 +270,7 @@ const prepareOneCardString = (id, isEdit = false, color = `green`, deadline = tr
                   alt="task picture"
                   class="card__img"
                 />
-              </label>
-              `}             
+              </label>            
 
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
@@ -362,11 +365,11 @@ const redrawTasks = (quantity) => {
   cardsElement.insertAdjacentHTML(`beforeEnd`, cardsString);
 };
 
-redrawTasks(7);
+redrawTasks(INITIAL_CARDS_NUMBER);
 
 filtersElement.addEventListener(`click`, (event) => {
   if (event.target && event.target.tagName === `LABEL`) {
-    redrawTasks(getRandomInteger(15));
+    redrawTasks(getRandomInteger(INITIAL_CARDS_NUMBER));
   }
 });
 

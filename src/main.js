@@ -15,19 +15,19 @@ const filters = [
   {label: `archive`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
 ];
 
-const prepareOneFilterString = (label, quatity, index) =>
+const prepareOneFilterString = (label, quantity, index) =>
   `
   <input type="radio"
          id="filter__${label}"
          class="filter__input visually-hidden"
          name="filter"
          ${index === 0 ? `checked` : ``}
-         ${quatity === 0 ? `disabled` : ``}
+         ${quantity === 0 ? `disabled` : ``}
   />
   <label for="filter__${label}" 
          class="filter__label">
        ${label} 
-      <span class="filter__${label}-count">${quatity}</span>
+      <span class="filter__${label}-count">${quantity}</span>
   </label>
 `;
 

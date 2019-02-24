@@ -39,9 +39,13 @@ export const mountFilter = () => {
   filtersElement.insertAdjacentHTML(`beforeEnd`, filtersString);
 
   filtersElement.addEventListener(`click`, (event) => {
-    if (event.target && event.target.tagName === `LABEL`) {
-      mountTasks(getRandomInteger(INITIAL_TASKS_NUMBER));
+    if (!event.target ||
+         event.target.tagName !== `LABEL` ||
+         event.target.control.disabled) {
+      return;
     }
+
+    mountTasks(getRandomInteger(INITIAL_TASKS_NUMBER));
   });
 };
 

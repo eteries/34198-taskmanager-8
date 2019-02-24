@@ -1,6 +1,6 @@
-import { mountTasks } from './tasks';
-import { getRandomInteger } from './common/utils';
-import { INITIAL_TASKS_NUMBER, MAX_TASKS_NUMBER } from './common/constants';
+import {mountTasks} from './tasks';
+import {getRandomInteger} from './common/utils';
+import {INITIAL_TASKS_NUMBER, MAX_TASKS_NUMBER} from './common/constants';
 
 const filters = [
   {label: `all`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},

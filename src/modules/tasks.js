@@ -1,9 +1,9 @@
 const prepareOneTaskString = (
-  id,
-  isEdit = false,
-  color = `green`,
-  deadline = true,
-  text = `this is a demo card`) => `
+    id,
+    isEdit = false,
+    color = `green`,
+    deadline = true,
+    text = `this is a demo card`) => `
 <article class="card card--${color}
                 ${isEdit ? `card--edit` : ``}
                 ${deadline ? `card--deadline` : ``}>

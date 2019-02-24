@@ -41,7 +41,8 @@ export const mountFilter = () => {
   filtersElement.addEventListener(`click`, (event) => {
     if (!event.target ||
          event.target.tagName !== `LABEL` ||
-         event.target.control.disabled) {
+         event.target.control.disabled ||
+         event.target.control.checked) {
       return;
     }
 

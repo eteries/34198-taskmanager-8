@@ -318,7 +318,7 @@ export const mountTasks = (quantity) => {
     cards.push(prepareOneTaskString(i));
   }
 
-  const cardsString = cards.reduce((resultingString, oneCardString) => resultingString + oneCardString);
+  const cardsString = cards.reduce((resultingString, oneCardString) => resultingString + oneCardString, '');
 
   const cardsElement = document.querySelector(`.board__tasks`);
   cardsElement.innerHTML = ``;

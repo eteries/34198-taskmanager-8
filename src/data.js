@@ -4,26 +4,36 @@ const taskTitles = [
   `Пройти интенсив на соточку`
 ];
 
-const randomRecentDate = Date.now - 7 * 24 * 60 * 60 * 1000 + Math.floor(Math.random * 7 * 24 * 60 * 60 * 1000);
+const colors = new Set([`black`, `yellow`, `blue`, `green`, `pink`]);
 
-const task = {
+const tags = new Set([`homework`, `theory`, `practice`, `intensive`, `keks`, `doNotForget`]);
+
+const days = new Set(
+    [
+      {name: `md`, checked: true},
+      {name: `tu`, checked: false},
+      {name: `we`, checked: true},
+      {name: `th`, checked: false},
+      {name: `fr`, checked: false},
+      {name: `sa`, checked: true},
+      {name: `su`, checked: false},
+    ]
+);
+
+const getRandomRecentDate = () => {
+  const WEEK = 7 * 24 * 60 * 60 * 1000;
+  return Date.now() - WEEK + Math.floor(Math.random() * 2 * WEEK);
+};
+
+export const getTask = () => ({
   title: taskTitles[Math.floor(Math.random() * 3)],
-  date: randomRecentDate,
-  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`, `doNotForget`]),
-  picture: `//picsum.photos/100/100?r=${Math.random()}`,
-  colors: new Set([`black`, `yellow`, `blue`, `green`, `pink`]),
+  date: getRandomRecentDate(),
+  tags: [...tags][Math.floor(Math.random() * (Math.ceil(Math.random() * 3)))],
+  picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+  color: [...colors][Math.floor(Math.random() * colors.size)],
   isRepeating: true,
-  repeatingDays: {
-    'mo': true,
-    'tu': false,
-    'we': true,
-    'th': false,
-    'fr': false,
-    'sa': true,
-    'su': false,
-  },
+  repeatingDays: days,
   isFavorite: true,
   isDone: true,
-  isEdit: false,
   isDeadline: true
-};
+});

@@ -1,6 +1,12 @@
-const prepareOneTaskString = (id, task) => `
-<article class="card card--${color.color}
-                ${task.isEdit ? `card--edit` : ``}
+import {getTask} from '../data';
+import {composeStringFromData, prepareDateString} from './common/utils';
+
+const isEdit = false;
+
+const prepareOneTaskString = (id, task) => {
+  return `
+<article class="card card--${task.color}"
+                ${isEdit ? `card--edit` : ``}
                 ${task.isDeadline ? `card--deadline` : ``}>
     <form class="card__form" method="get">
       <div class="card__inner">
@@ -17,7 +23,7 @@ const prepareOneTaskString = (id, task) => `
         </div>
 
         <div class="card__color-bar">
-          <svg${task.color === `blue` ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
+          <svg ${task.color === `blue` ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
             <use xlink:href="#wave"></use>
           </svg>
         </div>
@@ -44,9 +50,9 @@ const prepareOneTaskString = (id, task) => `
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="23 September"
+                    placeholder="${prepareDateString(task.date)}"
                     name="date"
-                    value="23 September"
+                    value="${prepareDateString(task.date)}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -66,86 +72,14 @@ const prepareOneTaskString = (id, task) => `
 
                 <fieldset class="card__repeat-days" disabled >
                     <div class="card__repeat-days-inner">
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-mo-${id}"
-                        name="repeat"
-                        value="mo"
-                      />
-                      <label class="card__repeat-day" for="repeat-mo-${id}"
-                        >mo</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-tu-${id}"
-                        name="repeat"
-                        value="tu"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-tu-${id}"
-                        >tu</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-we-${id}"
-                        name="repeat"
-                        value="we"
-                      />
-                      <label class="card__repeat-day" for="repeat-we-${id}"
-                        >we</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-th-${id}"
-                        name="repeat"
-                        value="th"
-                      />
-                      <label class="card__repeat-day" for="repeat-th-${id}"
-                        >th</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-fr-${id}"
-                        name="repeat"
-                        value="fr"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-fr-${id}"
-                        >fr</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        name="repeat"
-                        value="sa"
-                        id="repeat-sa-${id}"
-                      />
-                      <label class="card__repeat-day" for="repeat-sa-${id}"
-                        >sa</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-su-${id}"
-                        name="repeat"
-                        value="su"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-su-${id}"
-                        >su</label
-                      >
+                      ${composeStringFromData(task.repeatingDays, prepareDayString)}
                     </div>
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list" >
-                    ${prepareAllTagsString(task.tags)}
+                    ${composeStringFromData(task.tags, prepareTagString)}
                   </div>
 
                   <label>
@@ -166,7 +100,7 @@ const prepareOneTaskString = (id, task) => `
                       name="img"
                     />
                     <img
-                      src="img/sample-img.jpg"
+                      src="${task.picture}"
                       alt="task picture"
                       class="card__img"
                     />
@@ -260,6 +194,7 @@ const prepareOneTaskString = (id, task) => `
         </form>
       </article>
 `;
+};
 
 const prepareTagString = (name) => `
     <span class="card__hashtag-inner">
@@ -278,19 +213,26 @@ const prepareTagString = (name) => `
     </span>
 `;
 
-const prepareAllTagsString = (tags) => {
-  return [...tags]
-    .map((tag) => prepareTagString(tag))
-    .join(``);
-};
-
+const prepareDayString = (day, id) => `
+    <input
+      class="visually-hidden card__repeat-day-input"
+      type="checkbox"
+      id="repeat-${day.name}-${id}"
+      name="repeat"
+      value="${day.name}"
+      ${day.checked ? `checked` : ``}
+    />
+    <label class="card__repeat-day" for="repeat-${day.name}-${id}"
+      >${day.name}</label
+    >
+`;
 
 export const mountTasks = (quantity) => {
   const cards = [];
   const cardsQuantity = Number.isInteger(quantity) ? quantity : 0;
 
   for (let i = 0; i < cardsQuantity; i++) {
-    cards.push(prepareOneTaskString(i));
+    cards.push(prepareOneTaskString(i, getTask()));
   }
 
   const cardsString = cards.reduce((resultingString, oneCardString) => resultingString + oneCardString, ``);

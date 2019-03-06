@@ -1,12 +1,7 @@
-const prepareOneTaskString = (
-    id,
-    isEdit = false,
-    color = `green`,
-    deadline = true,
-    text = `this is a demo card`) => `
-<article class="card card--${color}
-                ${isEdit ? `card--edit` : ``}
-                ${deadline ? `card--deadline` : ``}>
+const prepareOneTaskString = (id, task) => `
+<article class="card card--${color.color}
+                ${task.isEdit ? `card--edit` : ``}
+                ${task.isDeadline ? `card--deadline` : ``}>
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -22,7 +17,7 @@ const prepareOneTaskString = (
         </div>
 
         <div class="card__color-bar">
-          <svg${color === `blue` ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
+          <svg${task.color === `blue` ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
             <use xlink:href="#wave"></use>
           </svg>
         </div>
@@ -33,7 +28,7 @@ const prepareOneTaskString = (
               class="card__text"
               placeholder="Start typing your text here..."
               name="text"
-            >${text}</textarea>
+            >${task.title}</textarea>
           </label>
         </div>
 
@@ -41,10 +36,10 @@ const prepareOneTaskString = (
           <div class="card__details">
             <div class="card__dates">
               <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">${deadline ? `yes` : `no`}</span>
+                date: <span class="card__date-status">${task.isDeadline ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__date-deadline" ${deadline ? `` : `disabled`}>
+                <fieldset class="card__date-deadline" ${task.isDeadline ? `` : `disabled`}>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
@@ -150,50 +145,7 @@ const prepareOneTaskString = (
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list" >
-                    <span class="card__hashtag-inner">
-                      <input
-                        type="hidden"
-                        name="hashtag"
-                        value="repeat"
-                        class="card__hashtag-hidden-input"
-                      />
-                      <button type="button" class="card__hashtag-name">
-                        #repeat
-                      </button>
-                      <button type="button" class="card__hashtag-delete">
-                        delete
-                      </button>
-                    </span>
-
-                    <span class="card__hashtag-inner">
-                      <input
-                        type="hidden"
-                        name="hashtag"
-                        value="repeat"
-                        class="card__hashtag-hidden-input"
-                      />
-                      <button type="button" class="card__hashtag-name">
-                        #cinema
-                      </button>
-                      <button type="button" class="card__hashtag-delete">
-                        delete
-                      </button>
-                    </span>
-
-                    <span class="card__hashtag-inner">
-                      <input
-                        type="hidden"
-                        name="hashtag"
-                        value="repeat"
-                        class="card__hashtag-hidden-input"
-                      />
-                      <button type="button" class="card__hashtag-name">
-                        #entertaiment
-                      </button>
-                      <button type="button" class="card__hashtag-delete">
-                        delete
-                      </button>
-                    </span>
+                    ${prepareAllTagsString(task.tags)}
                   </div>
 
                   <label>
@@ -308,6 +260,29 @@ const prepareOneTaskString = (
         </form>
       </article>
 `;
+
+const prepareTagString = (name) => `
+    <span class="card__hashtag-inner">
+      <input
+        type="hidden"
+        name="hashtag"
+        value="repeat"
+        class="card__hashtag-hidden-input"
+      />
+      <button type="button" class="card__hashtag-name">
+        #${name}
+      </button>
+      <button type="button" class="card__hashtag-delete">
+        delete
+      </button>
+    </span>
+`;
+
+const prepareAllTagsString = (tags) => {
+  return [...tags]
+    .map((tag) => prepareTagString(tag))
+    .join(``);
+};
 
 
 export const mountTasks = (quantity) => {

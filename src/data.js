@@ -4,19 +4,19 @@ const taskTitles = [
   `Пройти интенсив на соточку`
 ];
 
-const colors = new Set([`black`, `yellow`, `blue`, `green`, `pink`]);
+export const colors = new Set([`black`, `yellow`, `blue`, `green`, `pink`]);
 
 const tags = new Set([`homework`, `theory`, `practice`, `intensive`, `keks`, `doNotForget`]);
 
 const days = new Set(
     [
-      {name: `md`, checked: true},
-      {name: `tu`, checked: false},
-      {name: `we`, checked: true},
-      {name: `th`, checked: false},
-      {name: `fr`, checked: false},
-      {name: `sa`, checked: true},
-      {name: `su`, checked: false},
+      {label: `md`, checked: true},
+      {label: `tu`, checked: false},
+      {label: `we`, checked: true},
+      {label: `th`, checked: false},
+      {label: `fr`, checked: false},
+      {label: `sa`, checked: true},
+      {label: `su`, checked: false},
     ]
 );
 
@@ -28,7 +28,7 @@ const getRandomRecentDate = () => {
 export const getTask = () => ({
   title: taskTitles[Math.floor(Math.random() * 3)],
   date: getRandomRecentDate(),
-  tags: [...tags][Math.floor(Math.random() * (Math.ceil(Math.random() * 3)))],
+  tags: [...tags].splice(0, Math.ceil(Math.random() * 3)),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   color: [...colors][Math.floor(Math.random() * colors.size)],
   isRepeating: true,

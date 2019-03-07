@@ -1,6 +1,6 @@
 export const getRandomInteger = (max) => Math.floor(Math.random() * max);
 
-export const prepareDateString = (date) => {
+export const formatDate = (date) => {
   const day = new Date(date).getDate();
   const monthNum = new Date(date).getMonth();
   let month;
@@ -47,8 +47,8 @@ export const prepareDateString = (date) => {
   return `${day} ${month}`;
 };
 
-export const composeStringFromData = (data, cb) => {
+export const joinElements = (cb, data, cardId) => {
   return [...data]
-    .map((item, id) => cb(item, id))
+    .map((item) => cb(item, cardId))
     .join(``);
 };

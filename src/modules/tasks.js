@@ -1,5 +1,8 @@
-import {getTask} from '../data';
-import {composeStringFromData, prepareDateString} from './common/utils';
+import {colors, getTask} from '../data';
+import {joinElements, formatDate} from './common/utils';
+import {prepareTagString} from './tag';
+import {prepareColorString} from './color-input';
+import {prepareDayInputString} from './day-input';
 
 const isEdit = false;
 
@@ -50,9 +53,9 @@ const prepareOneTaskString = (id, task) => {
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${prepareDateString(task.date)}"
+                    placeholder="${formatDate(task.date)}"
                     name="date"
-                    value="${prepareDateString(task.date)}"
+                    value="${formatDate(task.date)}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -72,14 +75,14 @@ const prepareOneTaskString = (id, task) => {
 
                 <fieldset class="card__repeat-days" disabled >
                     <div class="card__repeat-days-inner">
-                      ${composeStringFromData(task.repeatingDays, prepareDayString)}
+                      ${joinElements(prepareDayInputString, task.repeatingDays, id)}
                     </div>
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list" >
-                    ${composeStringFromData(task.tags, prepareTagString)}
+                    ${joinElements(prepareTagString, task.tags)}
                   </div>
 
                   <label>
@@ -121,67 +124,7 @@ const prepareOneTaskString = (id, task) => {
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
-                  <input
-                    type="radio"
-                    id="color-black-${id}"
-                    class="card__color-input card__color-input--black visually-hidden"
-                    name="color"
-                    value="black"
-                  />
-                  <label
-                    for="color-black-${id}"
-                    class="card__color card__color--black"
-                    >black</label
-                  >
-                  <input
-                    type="radio"
-                    id="color-yellow-${id}"
-                    class="card__color-input card__color-input--yellow visually-hidden"
-                    name="color"
-                    value="yellow"
-                  />
-                  <label
-                    for="color-yellow-${id}"
-                    class="card__color card__color--yellow"
-                    >yellow</label
-                  >
-                  <input
-                    type="radio"
-                    id="color-blue-${id}"
-                    class="card__color-input card__color-input--blue visually-hidden"
-                    name="color"
-                    value="blue"
-                  />
-                  <label
-                    for="color-blue-${id}"
-                    class="card__color card__color--blue"
-                    >blue</label
-                  >
-                  <input
-                    type="radio"
-                    id="color-green-${id}"
-                    class="card__color-input card__color-input--green visually-hidden"
-                    name="color"
-                    value="green"
-                  />
-                  <label
-                    for="color-green-${id}"
-                    class="card__color card__color--green"
-                    >green</label
-                  >
-                  <input
-                    type="radio"
-                    id="color-pink-${id}"
-                    class="card__color-input card__color-input--pink visually-hidden"
-                    name="color"
-                    value="pink"
-                    checked
-                  />
-                  <label
-                    for="color-pink-${id}"
-                    class="card__color card__color--pink"
-                    >pink</label
-                  >
+                  ${joinElements(prepareColorString, colors, id)}
                 </div>
               </div>
             </div>
@@ -195,37 +138,6 @@ const prepareOneTaskString = (id, task) => {
       </article>
 `;
 };
-
-const prepareTagString = (name) => `
-    <span class="card__hashtag-inner">
-      <input
-        type="hidden"
-        name="hashtag"
-        value="repeat"
-        class="card__hashtag-hidden-input"
-      />
-      <button type="button" class="card__hashtag-name">
-        #${name}
-      </button>
-      <button type="button" class="card__hashtag-delete">
-        delete
-      </button>
-    </span>
-`;
-
-const prepareDayString = (day, id) => `
-    <input
-      class="visually-hidden card__repeat-day-input"
-      type="checkbox"
-      id="repeat-${day.name}-${id}"
-      name="repeat"
-      value="${day.name}"
-      ${day.checked ? `checked` : ``}
-    />
-    <label class="card__repeat-day" for="repeat-${day.name}-${id}"
-      >${day.name}</label
-    >
-`;
 
 export const mountTasks = (quantity) => {
   const cards = [];

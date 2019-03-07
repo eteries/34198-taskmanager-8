@@ -4,6 +4,9 @@ const taskTitles = [
   `Пройти интенсив на соточку`
 ];
 
+const MAX_TAGS_NUM = 3;
+const RECENT_WEEKS_NUM = 2;
+
 export const colors = new Set([`black`, `yellow`, `blue`, `green`, `pink`]);
 
 const tags = new Set([`homework`, `theory`, `practice`, `intensive`, `keks`, `doNotForget`]);
@@ -22,13 +25,13 @@ const days = new Set(
 
 const getRandomRecentDate = () => {
   const WEEK = 7 * 24 * 60 * 60 * 1000;
-  return Date.now() - WEEK + Math.floor(Math.random() * 2 * WEEK);
+  return Date.now() - WEEK + Math.floor(Math.random() * RECENT_WEEKS_NUM * WEEK);
 };
 
 export const getTask = () => ({
-  title: taskTitles[Math.floor(Math.random() * 3)],
+  title: taskTitles[Math.floor(Math.random() * taskTitles.length)],
   date: getRandomRecentDate(),
-  tags: [...tags].splice(0, Math.ceil(Math.random() * 3)),
+  tags: [...tags].splice(0, Math.ceil(Math.random() * MAX_TAGS_NUM)),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   color: [...colors][Math.floor(Math.random() * colors.size)],
   isRepeating: true,

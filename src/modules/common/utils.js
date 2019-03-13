@@ -26,3 +26,9 @@ export const joinElements = (cb, data, cardId) => {
     .map((item) => cb(item, cardId))
     .join(``);
 };
+
+export const createElement = (templateString) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = templateString.trim();
+  return newElement.firstChild;
+};

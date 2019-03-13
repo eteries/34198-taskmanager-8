@@ -1,4 +1,4 @@
-import {mountTasks} from './tasks';
+import {mountTasks} from './task';
 import {getRandomInteger} from './common/utils';
 import {INITIAL_TASKS_NUMBER, MAX_TASKS_NUMBER} from './common/constants';
 

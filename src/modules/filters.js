@@ -1,6 +1,7 @@
 import {mountTasks} from './task';
 import {getRandomInteger} from './common/utils';
 import {INITIAL_TASKS_NUMBER, MAX_TASKS_NUMBER} from './common/constants';
+import {Tasks} from './tasks';
 
 const filters = [
   {label: `all`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
@@ -46,7 +47,7 @@ export const mountFilter = () => {
       return;
     }
 
-    mountTasks(getRandomInteger(INITIAL_TASKS_NUMBER));
+    filtersElement.dispatchEvent(new Event('filter'));
   });
 };
 

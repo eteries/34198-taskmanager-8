@@ -41,7 +41,11 @@ export class Task {
     return this._element;
   }
 
-  mount(container) {
+  mount() {
+    if (this._element) {
+      this.unmount();
+    }
+
     this._element = createElement(this.template);
     this.attachEventListeners();
     return this._element;

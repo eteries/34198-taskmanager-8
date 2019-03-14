@@ -1,3 +1,6 @@
+import {getRandomInteger} from './modules/common/utils';
+import {INITIAL_TASKS_NUMBER} from './modules/common/constants';
+
 const taskTitles = [
   `Изучить теорию`,
   `Сделать домашку`,
@@ -5,6 +8,7 @@ const taskTitles = [
 ];
 
 const MAX_TAGS_NUM = 3;
+const MIN_TASKS_NUM = 1;
 const RECENT_WEEKS_NUM = 2;
 
 export const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
@@ -38,3 +42,7 @@ export const getTask = () => ({
   isDone: true,
   isDeadline: true
 });
+
+export const getTasks = () => {
+  return new Array(getRandomInteger(INITIAL_TASKS_NUMBER) + MIN_TASKS_NUM).fill(``).map(() => getTask());
+};

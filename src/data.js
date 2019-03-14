@@ -33,7 +33,7 @@ const getRandomRecentDate = () => {
 export const getTask = () => ({
   title: taskTitles[Math.floor(Math.random() * taskTitles.length)],
   date: getRandomRecentDate(),
-  tags: tags.splice(0, Math.ceil(Math.random() * MAX_TAGS_NUM)),
+  tags: [...tags].splice(0, Math.ceil(Math.random() * MAX_TAGS_NUM)),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   color: colors[Math.floor(Math.random() * colors.length)],
   isRepeating: true,

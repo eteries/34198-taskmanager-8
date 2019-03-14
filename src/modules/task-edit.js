@@ -1,8 +1,8 @@
 import {colors, getTask} from '../data';
 import {joinElements, formatDate, createElement} from './common/utils';
-import {prepareTagString} from './tag';
-import {prepareColorString} from './color-input';
-import {prepareDayInputString} from './day-input';
+import {prepareTagString, Tag} from './tag';
+import {ColorInput, prepareColorString} from './color-input';
+import {DayInput, prepareDayInputString} from './day-input';
 
 export class TaskEdit {
   constructor(task, id) {
@@ -43,6 +43,7 @@ export class TaskEdit {
 
   mount() {
     this._element = createElement(this.template);
+    this._appendChildren();
     this.attachEventListeners();
     return this._element;
   }
@@ -60,6 +61,30 @@ export class TaskEdit {
   detachEventListeners() {
     this._element.querySelector(`.card__save`)
                  .removeEventListener('click', this._onSubmitButtonClick);
+  }
+
+  _appendChildren() {
+    this._tags.forEach((tag) => this._addTag(tag));
+    colors.forEach((color) => this._addColor(color, this._id));
+    this._repeatingDays.forEach((day) => this._addDay(day, this._id));
+  }
+
+  _addTag(tag) {
+    const tagComponent = new Tag(tag);
+    const container = this._element.querySelector(`.card__hashtag-list`);
+    container.appendChild(tagComponent.mount());
+  }
+
+  _addColor(color, id) {
+    const colorInputComponent = new ColorInput(color, id);
+    const container = this._element.querySelector(`.card__colors-wrap`);
+    container.appendChild(colorInputComponent.mount());
+  }
+
+  _addDay(day, id) {
+    const dayInputComponent = new DayInput(day, id);
+    const container = this._element.querySelector(`.card__repeat-days-inner`);
+    container.appendChild(dayInputComponent.mount());
   }
 
   get template() {
@@ -124,20 +149,16 @@ export class TaskEdit {
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">no</span>
+                repeat:<span class="card__repeat-status">yes</span>
                 </button>
 
-                <fieldset class="card__repeat-days" disabled >
-                    <div class="card__repeat-days-inner">
-                      ${joinElements(prepareDayInputString, this._repeatingDays, this._id)}
-                    </div>
+                <fieldset class="card__repeat-days">
+                    <div class="card__repeat-days-inner"></div>
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
-                  <div class="card__hashtag-list" >
-                    ${joinElements(prepareTagString, this._tags)}
-                  </div>
+                  <div class="card__hashtag-list"></div>
 
                   <label>
                     <input
@@ -177,9 +198,7 @@ export class TaskEdit {
 
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
-                <div class="card__colors-wrap">
-                  ${joinElements(prepareColorString, colors, this._id)}
-                </div>
+                <div class="card__colors-wrap"></div>
               </div>
             </div>
 

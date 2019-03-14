@@ -1,8 +1,9 @@
 import {colors, getTask} from '../data';
 import {joinElements, formatDate, createElement} from './common/utils';
-import {prepareTagString} from './tag';
-import {prepareColorString} from './color-input';
+import {prepareTagString, Tag} from './tag';
+import {ColorInput, prepareColorString} from './color-input';
 import {prepareDayInputString} from './day-input';
+import {TaskEdit} from './task-edit';
 
 export class Task {
   constructor(task, id) {
@@ -47,6 +48,7 @@ export class Task {
     }
 
     this._element = createElement(this.template);
+    this._appendChildren();
     this.attachEventListeners();
     return this._element;
   }
@@ -64,6 +66,16 @@ export class Task {
   detachEventListeners() {
     this._element.querySelector(`.card__btn--edit`)
                  .removeEventListener('click', this._onEditButtonClick);
+  }
+
+  _appendChildren() {
+    this._tags.forEach((tag) => this._addTag(tag));
+  }
+
+  _addTag(tag) {
+    const tagComponent = new Tag(tag);
+    const container = this._element.querySelector(`.card__hashtag-list`);
+    container.appendChild(tagComponent.mount());
   }
 
   get template() {
@@ -103,55 +115,34 @@ export class Task {
           <div class="card__details">
             <div class="card__dates">
               <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">${this._isDeadline ? `yes` : `no`}</span>
-                </button>
+              date: <span class="card__date-status">${this._isDeadline ? `yes` : `no`}</span>
+              </button>
 
-                <fieldset class="card__date-deadline" ${this._isDeadline ? `` : `disabled`}>
-                <label class="card__input-deadline-wrap">
-                  <input
-                    class="card__date"
-                    type="text"
-                    placeholder="${formatDate(this._dueDate)}"
-                    name="date"
-                    value="${formatDate(this._dueDate)}"
-                  />
-                </label>
-                <label class="card__input-deadline-wrap">
-                  <input
-                    class="card__time"
-                    type="text"
-                    placeholder="11:15 PM"
-                    name="time"
-                    value="11:15 PM"
-                  />
-                </label>
+              <fieldset class="card__date-deadline" ${this._isDeadline ? `` : `disabled`}>
+              <label class="card__input-deadline-wrap">
+                <input
+                  class="card__date"
+                  type="text"
+                  placeholder="${formatDate(this._dueDate)}"
+                  name="date"
+                  value="${formatDate(this._dueDate)}"
+                />
+              </label>
+              <label class="card__input-deadline-wrap">
+                <input
+                  class="card__time"
+                  type="text"
+                  placeholder="11:15 PM"
+                  name="time"
+                  value="11:15 PM"
+                />
+              </label>
               </fieldset>
+            </div>
 
-              <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">no</span>
-                </button>
-
-                <fieldset class="card__repeat-days" disabled >
-                    <div class="card__repeat-days-inner">
-                      ${joinElements(prepareDayInputString, this._repeatingDays, this._id)}
-                    </div>
-                  </fieldset>
-                </div>
-
-                <div class="card__hashtag">
-                  <div class="card__hashtag-list" >
-                    ${joinElements(prepareTagString, this._tags)}
-                  </div>
-
-                  <label>
-                    <input
-                      type="text"
-                      class="card__hashtag-input"
-                      name="hashtag-input"
-                      placeholder="Type new hashtag here"
-                    />
-                  </label>
-                </div>
+            <div class="card__hashtag">
+              <div class="card__hashtag-list" ></div>
+            </div>
               </div>
               
               <label class="card__img-wrap">
@@ -166,30 +157,6 @@ export class Task {
                       class="card__img"
                     />
               </label>
-              <label class="card__img-wrap card__img-wrap--empty" hidden>
-                <input
-                  type="file"
-                  class="card__img-input visually-hidden"
-                  name="img"
-                />
-                <img
-                  src="img/add-photo.svg"
-                  alt="task picture"
-                  class="card__img"
-                />
-              </label>            
-
-              <div class="card__colors-inner">
-                <h3 class="card__colors-title">Color</h3>
-                <div class="card__colors-wrap">
-                  ${joinElements(prepareColorString, colors, this._id)}
-                </div>
-              </div>
-            </div>
-
-            <div class="card__status-btns">
-              <button class="card__save" type="submit">save</button>
-              <button class="card__delete" type="button">delete</button>
             </div>
           </div>
         </form>
@@ -197,18 +164,3 @@ export class Task {
     `;
   }
 }
-
-export const mountTasks = (quantity) => {
-  const cards = [];
-  const cardsQuantity = Number.isInteger(quantity) ? quantity : 0;
-
-  for (let i = 0; i < cardsQuantity; i++) {
-    cards.push(new Task(getTask(), i));
-  }
-
-  const cardsString = cards.reduce((resultingString, oneCardString) => resultingString + oneCardString, ``);
-
-  const cardsElement = document.querySelector(`.board__tasks`);
-  cardsElement.innerHTML = ``;
-  cardsElement.insertAdjacentHTML(`beforeEnd`, cardsString);
-};

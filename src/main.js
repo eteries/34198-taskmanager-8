@@ -1,8 +1,8 @@
-import {mountFilter} from './modules/filters';
-import {mountTasks} from './modules/tasks';
-import {INITIAL_TASKS_NUMBER} from './modules/common/constants';
+import {Filters} from './modules/filters';
+import {Tasks} from './modules/tasks';
 
-mountFilter();
-mountTasks(INITIAL_TASKS_NUMBER);
+const filters = new Filters();
+document.querySelector(`.main__filter`).appendChild(filters.mount());
 
-
+const tasks = new Tasks();
+document.querySelector(`.board`).appendChild(tasks.mount());

@@ -1,6 +1,6 @@
-import {mountTasks} from './tasks';
-import {getRandomInteger} from './common/utils';
-import {INITIAL_TASKS_NUMBER, MAX_TASKS_NUMBER} from './common/constants';
+import {createElement, getRandomInteger} from './common/utils';
+import {MAX_TASKS_NUMBER} from './common/constants';
+import {Filter} from './filter';
 
 const filters = [
   {label: `all`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
@@ -12,42 +12,58 @@ const filters = [
   {label: `archive`, quantity: getRandomInteger(MAX_TASKS_NUMBER)},
 ];
 
-const filtersElement = document.querySelector(`.main__filter`);
+export class Filters {
+  constructor() {
+    this._element = null;
 
-const prepareOneFilterString = (label, quantity, index) =>
-  `
-  <input type="radio"
-         id="filter__${label}"
-         class="filter__input visually-hidden"
-         name="filter"
-         ${index === 0 ? `checked` : ``}
-         ${quantity === 0 ? `disabled` : ``}
-  />
-  <label for="filter__${label}" 
-         class="filter__label">
-       ${label} 
-      <span class="filter__${label}-count">${quantity}</span>
-  </label>
-`;
+    this._onClick = (event) => {
+      this._handleOnClick(event);
+    };
+  }
 
-const filtersString = filters
-  .map((filter, index) => prepareOneFilterString(filter.label, filter.quantity, index))
-  .reduce((resultingString, oneFilterString) => resultingString + oneFilterString);
+  mount() {
+    if (this._element) {
+      this.unmount();
+    }
 
-export const mountFilter = () => {
-  filtersElement.innerHTML = ``;
-  filtersElement.insertAdjacentHTML(`beforeEnd`, filtersString);
+    this._element = createElement(`<div class="filter"></div>`);
+    this._appendChildren();
+    this.attachEventListeners();
+    return this._element;
+  }
 
-  filtersElement.addEventListener(`click`, (event) => {
+  unmount() {
+    this._element = null;
+    this.detachEventListeners();
+  }
+
+  attachEventListeners() {
+    this._element
+      .addEventListener(`click`, this._onClick);
+  }
+
+  detachEventListeners() {
+    this._element
+      .removeEventListener(`click`, this._onClick);
+  }
+
+  _handleOnClick(event) {
     if (!event.target ||
-         event.target.tagName !== `LABEL` ||
-         event.target.control.disabled ||
-         event.target.control.checked) {
+      event.target.tagName !== `LABEL` ||
+      event.target.control.disabled ||
+      event.target.control.checked) {
       return;
     }
 
-    mountTasks(getRandomInteger(INITIAL_TASKS_NUMBER));
-  });
-};
+    this._element.dispatchEvent(new Event(`filter`));
+  }
 
+  _appendChildren() {
+    filters.forEach((filter, index) => this._addFilter(filter.label, filter.quantity, index));
+  }
 
+  _addFilter(label, quantity, index) {
+    const filterComponent = new Filter(label, quantity, index);
+    this._element.appendChild(filterComponent.mount());
+  }
+}

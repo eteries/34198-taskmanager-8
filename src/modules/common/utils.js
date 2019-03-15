@@ -21,14 +21,14 @@ export const formatDate = (date) => {
   return `${day} ${months[monthNum]}`;
 };
 
-export const joinElements = (cb, data, cardId) => {
-  return [...data]
-    .map((item) => cb(item, cardId))
-    .join(``);
+export const createFragment = (templateString) => {
+  const template = document.createElement(`template`);
+  template.innerHTML = templateString;
+  return template.content;
 };
 
 export const createElement = (templateString) => {
-  const t = document.createElement(`template`);
-  t.innerHTML = templateString;
-  return t.content;
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = templateString.trim();
+  return newElement.firstChild;
 };

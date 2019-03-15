@@ -1,4 +1,4 @@
-import {createElement} from './common/utils';
+import {createFragment} from './common/utils';
 
 export class Filter {
   constructor(label, quantity, index) {
@@ -14,7 +14,7 @@ export class Filter {
       this.unmount();
     }
 
-    this._element = createElement(this.template);
+    this._element = createFragment(this.template);
     return this._element;
   }
 

@@ -15,6 +15,10 @@ const filters = [
 export class Filters {
   constructor() {
     this._element = null;
+
+    this._onClick = (event) => {
+      this._handleOnClick(event);
+    };
   }
 
   mount() {
@@ -22,7 +26,7 @@ export class Filters {
       this.unmount();
     }
 
-    this._element = createElement(``);
+    this._element = createElement(`<div class="filter"></div>`);
     this._appendChildren();
     this.attachEventListeners();
     return this._element;
@@ -35,15 +39,15 @@ export class Filters {
 
   attachEventListeners() {
     this._element
-      .addEventListener(`click`, this.handleFilterClick);
+      .addEventListener(`click`, this._onClick);
   }
 
   detachEventListeners() {
     this._element
-      .removeEventListener(`click`, this.handleFilterClick);
+      .removeEventListener(`click`, this._onClick);
   }
 
-  handleFilterClick(event) {
+  _handleOnClick(event) {
     if (!event.target ||
       event.target.tagName !== `LABEL` ||
       event.target.control.disabled ||

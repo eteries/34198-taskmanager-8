@@ -6,5 +6,3 @@ document.querySelector(`.main__filter`).appendChild(filters.mount());
 
 const tasks = new Tasks();
 document.querySelector(`.board`).appendChild(tasks.mount());
-
-

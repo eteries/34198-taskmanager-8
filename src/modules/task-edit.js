@@ -1,8 +1,8 @@
-import {colors, getTask} from '../data';
-import {joinElements, formatDate, createElement} from './common/utils';
-import {prepareTagString, Tag} from './tag';
-import {ColorInput, prepareColorString} from './color-input';
-import {DayInput, prepareDayInputString} from './day-input';
+import {colors} from '../data';
+import {formatDate, createElement} from './common/utils';
+import {Tag} from './tag';
+import {ColorInput} from './color-input';
+import {DayInput} from './day-input';
 
 export class TaskEdit {
   constructor(task, id) {
@@ -21,8 +21,10 @@ export class TaskEdit {
 
     this._onSubmitButtonClick = (event) => {
       event.preventDefault();
-      typeof this._onSubmit === `function` && this._onSubmit();
-    }
+      if (typeof this._onSubmit === `function`) {
+        this._onSubmit();
+      }
+    };
   }
 
   get _isDeadline() {
@@ -55,12 +57,12 @@ export class TaskEdit {
 
   attachEventListeners() {
     this._element.querySelector(`.card__save`)
-                 .addEventListener('click', this._onSubmitButtonClick);
+                 .addEventListener(`click`, this._onSubmitButtonClick);
   }
 
   detachEventListeners() {
     this._element.querySelector(`.card__save`)
-                 .removeEventListener('click', this._onSubmitButtonClick);
+                 .removeEventListener(`click`, this._onSubmitButtonClick);
   }
 
   _appendChildren() {
@@ -149,10 +151,10 @@ export class TaskEdit {
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">yes</span>
+                repeat:<span class="card__repeat-status">no</span>
                 </button>
 
-                <fieldset class="card__repeat-days">
+                <fieldset class="card__repeat-days" disabled >
                     <div class="card__repeat-days-inner"></div>
                   </fieldset>
                 </div>
@@ -212,18 +214,3 @@ export class TaskEdit {
     `;
   }
 }
-
-/*export const mountTasks = (quantity) => {
-  const cards = [];
-  const cardsQuantity = Number.isInteger(quantity) ? quantity : 0;
-
-  for (let i = 0; i < cardsQuantity; i++) {
-    cards.push(new Task(getTask(), i));
-  }
-
-  const cardsString = cards.reduce((resultingString, oneCardString) => resultingString + oneCardString, ``);
-
-  const cardsElement = document.querySelector(`.board__tasks`);
-  cardsElement.innerHTML = ``;
-  cardsElement.insertAdjacentHTML(`beforeEnd`, cardsString);
-};*/

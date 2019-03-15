@@ -9,7 +9,7 @@ export class Tasks {
 
     this._onFilter = () => {
       this._filterTasks();
-    }
+    };
   }
 
   mount() {
@@ -30,12 +30,12 @@ export class Tasks {
 
   _attachEventListeners() {
     document.querySelector(`.main__filter`)
-      .addEventListener('filter', this._onFilter);
+      .addEventListener(`filter`, this._onFilter);
   }
 
   _detachEventListeners() {
-    this._element.querySelector(`.main__filter`)
-      .removeEventListener('filter', this._onFilter);
+    document.querySelector(`.main__filter`)
+      .removeEventListener(`filter`, this._onFilter);
   }
 
   _addTask(task, id) {
@@ -63,22 +63,19 @@ export class Tasks {
   }
 
   _filterTasks() {
-    const container = this._element.querySelector(`.board__tasks`);
-    container.innerHTML = ``;
-    this._appendChildren();
+    this.mount();
   }
 
   get template() {
-    return `<div>
+    return `
     <p class="board__no-tasks visually-hidden">
           Congratulations, all tasks were completed! To create a new click on
           «add new task» button.
     </p>
 
-    <div class="board__tasks">
-    </div>
+    <div class="board__tasks"></div>
 
     <button class="load-more" type="button">load more</button>
-    </div>`;
+    `;
   }
 }

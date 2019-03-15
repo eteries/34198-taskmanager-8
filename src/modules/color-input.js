@@ -35,6 +35,6 @@ export class ColorInput {
       class="card__color card__color--${this._colorName}"
       >${this._colorName}</label
 </div>
-    `
+    `;
   }
 }

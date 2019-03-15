@@ -1,9 +1,5 @@
-import {colors, getTask} from '../data';
-import {joinElements, formatDate, createElement} from './common/utils';
-import {prepareTagString, Tag} from './tag';
-import {ColorInput, prepareColorString} from './color-input';
-import {prepareDayInputString} from './day-input';
-import {TaskEdit} from './task-edit';
+import {formatDate, createElement} from './common/utils';
+import {Tag} from './tag';
 
 export class Task {
   constructor(task, id) {
@@ -22,8 +18,10 @@ export class Task {
 
     this._onEditButtonClick = (event) => {
       event.preventDefault();
-      typeof this._onEdit === `function` && this._onEdit();
-    }
+      if (typeof this._onEdit === `function`) {
+        this._onEdit();
+      }
+    };
   }
 
   get _isDeadline() {
@@ -60,12 +58,12 @@ export class Task {
 
   attachEventListeners() {
     this._element.querySelector(`.card__btn--edit`)
-                 .addEventListener('click', this._onEditButtonClick);
+                 .addEventListener(`click`, this._onEditButtonClick);
   }
 
   detachEventListeners() {
     this._element.querySelector(`.card__btn--edit`)
-                 .removeEventListener('click', this._onEditButtonClick);
+                 .removeEventListener(`click`, this._onEditButtonClick);
   }
 
   _appendChildren() {
@@ -142,6 +140,15 @@ export class Task {
 
             <div class="card__hashtag">
               <div class="card__hashtag-list" ></div>
+
+              <label>
+                <input
+                  type="text"
+                  class="card__hashtag-input"
+                  name="hashtag-input"
+                  placeholder="Type new hashtag here"
+                />
+              </label>
             </div>
               </div>
               
@@ -157,6 +164,11 @@ export class Task {
                       class="card__img"
                     />
               </label>
+            </div>
+
+            <div class="card__status-btns">
+              <button class="card__save" type="submit">save</button>
+              <button class="card__delete" type="button">delete</button>
             </div>
           </div>
         </form>

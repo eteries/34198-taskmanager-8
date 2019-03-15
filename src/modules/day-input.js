@@ -35,6 +35,6 @@ export class DayInput {
       >${this._dayName.label}</label
     >
 </div>
-    `
+    `;
   }
 }

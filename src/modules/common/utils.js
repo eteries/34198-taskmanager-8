@@ -28,7 +28,7 @@ export const joinElements = (cb, data, cardId) => {
 };
 
 export const createElement = (templateString) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = templateString.trim();
-  return newElement.firstChild;
+  const t = document.createElement(`template`);
+  t.innerHTML = templateString;
+  return t.content;
 };

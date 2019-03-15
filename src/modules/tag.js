@@ -35,6 +35,6 @@ export class Tag {
         delete
       </button>
     </span>
-    `
+    `;
   }
 }

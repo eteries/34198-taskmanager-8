@@ -1,5 +1,4 @@
 import {getRandomInteger} from './modules/common/utils';
-import {INITIAL_TASKS_NUMBER} from './modules/common/constants';
 
 const taskTitles = [
   `Изучить теорию`,
@@ -10,6 +9,8 @@ const taskTitles = [
 const MAX_TAGS_NUM = 3;
 const MIN_TASKS_NUM = 1;
 const RECENT_WEEKS_NUM = 2;
+export const MAX_TASKS_NUMBER = 100;
+export const INITIAL_TASKS_NUMBER = 7;
 
 export const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
 

@@ -1,18 +1,18 @@
-import {formatDate, createElement} from './common/utils';
+import {formatDate} from './common/utils';
 import {Tag} from './tag';
+import {Component} from './common/component';
 
-export class Task {
-  constructor(task, id) {
+export class Task extends Component {
+  constructor(task) {
+    super();
+
     this._title = task.title;
     this._dueDate = task.date;
     this._tags = task.tags;
     this._picture = task.picture;
     this._repeatingDays = task.repeatingDays;
 
-    this._id = id;
     this._color = `blue`;
-
-    this._element = null;
 
     this._onEdit = null;
 
@@ -36,32 +36,12 @@ export class Task {
     this._onEdit = fn;
   }
 
-  get element() {
-    return this._element;
-  }
-
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createElement(this.template);
-    this._appendChildren();
-    this.attachEventListeners();
-    return this._element;
-  }
-
-  unmount() {
-    this.detachEventListeners();
-    this._element = null;
-  }
-
-  attachEventListeners() {
+  createListeners() {
     this._element.querySelector(`.card__btn--edit`)
                  .addEventListener(`click`, this._onEditButtonClick);
   }
 
-  detachEventListeners() {
+  removeListeners() {
     this._element.querySelector(`.card__btn--edit`)
                  .removeEventListener(`click`, this._onEditButtonClick);
   }
@@ -73,7 +53,7 @@ export class Task {
   _addTag(tag) {
     const tagComponent = new Tag(tag);
     const container = this._element.querySelector(`.card__hashtag-list`);
-    container.appendChild(tagComponent.mount());
+    container.appendChild(tagComponent.render());
   }
 
   get template() {

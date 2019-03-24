@@ -1,23 +1,11 @@
-import {createElement} from './common/utils';
+import {Component} from './common/component';
 
-export class DayInput {
+export class DayInput extends Component {
   constructor(dayName, id) {
+    super();
+
     this._dayName = dayName;
     this._id = id;
-    this._element = null;
-  }
-
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createElement(this.template);
-    return this._element;
-  }
-
-  unmount() {
-    this._element = null;
   }
 
   get template() {

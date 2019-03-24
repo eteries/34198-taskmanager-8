@@ -1,22 +1,11 @@
-import {createElement} from './common/utils';
+import {Component} from './common/component';
 
-export class ColorInput {
+export class ColorInput extends Component {
   constructor(colorName, id) {
+    super();
+
     this._colorName = colorName;
     this._id = id;
-    this._element = null;
-  }
-
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createElement(this.template);
-    return this._element;
-  }
-
-  unmount() {
     this._element = null;
   }
 

@@ -1,22 +1,10 @@
-import {createElement} from './common/utils';
+import {Component} from './common/component';
 
-export class Tag {
+export class Tag extends Component {
   constructor(tag) {
+    super();
+
     this._name = tag;
-    this._element = null;
-  }
-
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createElement(this.template);
-    return this._element;
-  }
-
-  unmount() {
-    this._element = null;
   }
 
   get template() {

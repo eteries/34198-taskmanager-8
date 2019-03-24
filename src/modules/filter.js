@@ -1,25 +1,12 @@
-import {createFragment} from './common/utils';
+import {Component} from './common/component';
 
-export class Filter {
+export class Filter extends Component {
   constructor(label, quantity, index) {
+    super();
+
     this._label = label;
     this._quantity = quantity;
     this._index = index;
-
-    this._element = null;
-  }
-
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createFragment(this.template);
-    return this._element;
-  }
-
-  unmount() {
-    this._element = null;
   }
 
   get template() {

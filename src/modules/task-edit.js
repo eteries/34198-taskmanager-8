@@ -1,11 +1,14 @@
 import {colors} from '../data';
-import {formatDate, createElement} from './common/utils';
+import {formatDate} from './common/utils';
 import {Tag} from './tag';
 import {ColorInput} from './color-input';
 import {DayInput} from './day-input';
+import {Component} from './common/component';
 
-export class TaskEdit {
+export class TaskEdit extends Component {
   constructor(task, id) {
+    super();
+
     this._title = task.title;
     this._dueDate = task.date;
     this._tags = task.tags;
@@ -14,8 +17,6 @@ export class TaskEdit {
 
     this._id = id;
     this._color = `blue`;
-
-    this._element = null;
 
     this._onSubmit = null;
 
@@ -39,28 +40,12 @@ export class TaskEdit {
     this._onSubmit = fn;
   }
 
-  get element() {
-    return this._element;
-  }
-
-  mount() {
-    this._element = createElement(this.template);
-    this._appendChildren();
-    this.attachEventListeners();
-    return this._element;
-  }
-
-  unmount() {
-    this.detachEventListeners();
-    this._element = null;
-  }
-
-  attachEventListeners() {
+  createListeners() {
     this._element.querySelector(`.card__save`)
                  .addEventListener(`click`, this._onSubmitButtonClick);
   }
 
-  detachEventListeners() {
+  removeListeners() {
     this._element.querySelector(`.card__save`)
                  .removeEventListener(`click`, this._onSubmitButtonClick);
   }
@@ -74,19 +59,19 @@ export class TaskEdit {
   _addTag(tag) {
     const tagComponent = new Tag(tag);
     const container = this._element.querySelector(`.card__hashtag-list`);
-    container.appendChild(tagComponent.mount());
+    container.appendChild(tagComponent.render());
   }
 
   _addColor(color, id) {
     const colorInputComponent = new ColorInput(color, id);
     const container = this._element.querySelector(`.card__colors-wrap`);
-    container.appendChild(colorInputComponent.mount());
+    container.appendChild(colorInputComponent.render());
   }
 
   _addDay(day, id) {
     const dayInputComponent = new DayInput(day, id);
     const container = this._element.querySelector(`.card__repeat-days-inner`);
-    container.appendChild(dayInputComponent.mount());
+    container.appendChild(dayInputComponent.render());
   }
 
   get template() {

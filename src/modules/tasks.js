@@ -1,40 +1,23 @@
-import {createElement} from './common/utils';
 import {Task} from './task';
 import {TaskEdit} from './task-edit';
 import {getTasks} from '../data';
+import {Component} from './common/component';
 
-export class Tasks {
+export class Tasks extends Component {
   constructor() {
-    this._element = null;
+    super();
 
     this._onFilter = () => {
       this._filterTasks();
     };
   }
 
-  mount() {
-    if (this._element) {
-      this.unmount();
-    }
-
-    this._element = createElement(this.template);
-    this._appendChildren();
-    this._attachEventListeners();
-    return this._element;
-  }
-
-  unmount() {
-    this._detachEventListeners();
-    this._element.parentNode.removeChild(this._element);
-    this._element = null;
-  }
-
-  _attachEventListeners() {
+  createListeners() {
     document.querySelector(`.filter`)
       .addEventListener(`filter`, this._onFilter);
   }
 
-  _detachEventListeners() {
+  removeListeners() {
     document.querySelector(`.filter`)
       .removeEventListener(`filter`, this._onFilter);
   }
@@ -47,7 +30,7 @@ export class Tasks {
     container.appendChild(taskComponent.render());
 
     taskComponent.onEdit = () => {
-      editTaskComponent.mount();
+      editTaskComponent.render();
       container.replaceChild(editTaskComponent.element, taskComponent.element);
       taskComponent.unrender();
     };
@@ -55,7 +38,7 @@ export class Tasks {
     editTaskComponent.onSubmit = () => {
       taskComponent.render();
       container.replaceChild(taskComponent.element, editTaskComponent.element);
-      editTaskComponent.unmount();
+      editTaskComponent.unrender();
     };
   }
 
@@ -64,8 +47,8 @@ export class Tasks {
   }
 
   _filterTasks() {
-    this.unmount();
-    document.querySelector(`.board`).appendChild(this.mount());
+    this.unrender();
+    document.querySelector(`.board`).appendChild(this.render());
   }
 
   get template() {

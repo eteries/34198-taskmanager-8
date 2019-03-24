@@ -22,7 +22,7 @@ export class Component {
 
   unrender() {
     this.removeListeners();
-    this._element.parentNode.removeChild(this._element);
+    this._element.remove();
     this._element = null;
   }
 
@@ -36,5 +36,7 @@ export class Component {
     return this._element;
   }
 
-  get template() {}
+  get template() {
+    throw new Error(`You have to define template.`);
+  }
 }

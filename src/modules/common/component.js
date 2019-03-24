@@ -21,7 +21,9 @@ export class Component {
   }
 
   unrender() {
-
+    this.removeListeners();
+    this._element.parentNode.removeChild(this._element);
+    this._element = null;
   }
 
   createListeners() {}

@@ -1,8 +1,11 @@
 import {formatDate, createElement} from './common/utils';
 import {Tag} from './tag';
+import {Component} from './common/component';
 
-export class Task {
+export class Task extends Component {
   constructor(task, id) {
+    super();
+
     this._title = task.title;
     this._dueDate = task.date;
     this._tags = task.tags;
@@ -40,9 +43,9 @@ export class Task {
     return this._element;
   }
 
-  mount() {
+  render() {
     if (this._element) {
-      this.unmount();
+      this.unrender();
     }
 
     this._element = createElement(this.template);
@@ -51,7 +54,7 @@ export class Task {
     return this._element;
   }
 
-  unmount() {
+  unrender() {
     this.detachEventListeners();
     this._element = null;
   }

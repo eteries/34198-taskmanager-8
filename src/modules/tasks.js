@@ -44,16 +44,16 @@ export class Tasks {
     const editTaskComponent = new TaskEdit(task, id);
 
     const container = this._element.querySelector(`.board__tasks`);
-    container.appendChild(taskComponent.mount());
+    container.appendChild(taskComponent.render());
 
     taskComponent.onEdit = () => {
       editTaskComponent.mount();
       container.replaceChild(editTaskComponent.element, taskComponent.element);
-      taskComponent.unmount();
+      taskComponent.unrender();
     };
 
     editTaskComponent.onSubmit = () => {
-      taskComponent.mount();
+      taskComponent.render();
       container.replaceChild(taskComponent.element, editTaskComponent.element);
       editTaskComponent.unmount();
     };

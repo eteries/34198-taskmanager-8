@@ -22,9 +22,15 @@ export class TaskEdit extends Component {
 
     this._onSubmitButtonClick = (event) => {
       event.preventDefault();
+
+      const formData = new FormData(this._element.querySelector(`.card__form`));
+      const newData = this._processForm(formData);
+
       if (typeof this._onSubmit === `function`) {
-        this._onSubmit();
+        this._onSubmit(newData);
       }
+
+      this.update(newData);
     };
   }
 
@@ -72,6 +78,24 @@ export class TaskEdit extends Component {
     const dayInputComponent = new DayInput(day, id);
     const container = this._element.querySelector(`.card__repeat-days-inner`);
     container.appendChild(dayInputComponent.render());
+  }
+
+  _processForm(formData) {
+    const entry = {
+      title: ``,
+      color: ``,
+      tags: new Set(),
+      dueDate: new Date(),
+      repeatingDays: {
+        'mo': false,
+        'tu': false,
+        'we': false,
+        'th': false,
+        'fr': false,
+        'sa': false,
+        'su': false,
+      }
+    };
   }
 
   get template() {

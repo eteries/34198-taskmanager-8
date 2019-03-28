@@ -30,6 +30,8 @@ export class Component {
 
   removeListeners() {}
 
+  update() {}
+
   _appendChildren() {}
 
   get element() {

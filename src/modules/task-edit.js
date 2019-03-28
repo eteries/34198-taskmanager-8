@@ -16,7 +16,14 @@ export class TaskEdit extends Component {
     this._repeatingDays = task.repeatingDays;
 
     this._id = id;
-    this._color = `blue`;
+    this._color = task.color;
+
+    this._state = {};
+    this._state.isDate = false;
+    this._state.isRepeated = false;
+
+    this._onChangeDate = this._onChangeDate.bind(this);
+    this._onChangeRepeated = this._onChangeRepeated.bind(this);
 
     this._onSubmit = null;
 
@@ -80,22 +87,48 @@ export class TaskEdit extends Component {
     container.appendChild(dayInputComponent.render());
   }
 
+  _onChangeDate() {
+    this._state.isDate = !this._state.isDate;
+    this.removeListeners();
+    this._partialUpdate();
+    this.createListeners();
+  }
+
+  _onChangeRepeated() {
+    this._state.isRepeated = !this._state.isRepeated;
+    this.removeListeners();
+    this._partialUpdate();
+    this.createListeners();
+  }
+
+  _partialUpdate() {
+    this._element.innerHTML = this.template;
+  }
+
   _processForm(formData) {
     const entry = {
       title: ``,
       color: ``,
-      tags: new Set(),
+      tags: [],
       dueDate: new Date(),
-      repeatingDays: {
-        'mo': false,
-        'tu': false,
-        'we': false,
-        'th': false,
-        'fr': false,
-        'sa': false,
-        'su': false,
-      }
+      repeatingDays: [
+        {label: `md`, checked: false},
+        {label: `tu`, checked: false},
+        {label: `we`, checked: false},
+        {label: `th`, checked: false},
+        {label: `fr`, checked: false},
+        {label: `sa`, checked: false},
+        {label: `su`, checked: false}
+      ]
     };
+  }
+
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._repeatingDays = data.repeatingDays;
+    this._dueDate = data.dueDate;
   }
 
   get template() {

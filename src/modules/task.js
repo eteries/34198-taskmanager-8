@@ -1,6 +1,7 @@
-import {formatDate} from './common/utils';
 import {Tag} from './tag';
 import {Component} from './common/component';
+
+import moment from 'moment';
 
 export class Task extends Component {
   constructor(task) {
@@ -11,8 +12,7 @@ export class Task extends Component {
     this._tags = task.tags;
     this._picture = task.picture;
     this._repeatingDays = task.repeatingDays;
-
-    this._color = `blue`;
+    this._color = task.color;
 
     this._onEdit = null;
 
@@ -63,13 +63,6 @@ export class Task extends Component {
     this._repeatingDays = data.repeatingDays;
   }
 
-  update(data) {
-    this._title = data.title;
-    this._tags = data.tags;
-    this._color = data.color;
-    this._repeatingDays = data.repeatingDays;
-  }
-
   get template() {
     return `
 <article class="card card--${this._color} ${this._isDeadline ? `card--deadline` : ``}">
@@ -88,7 +81,7 @@ export class Task extends Component {
         </div>
 
         <div class="card__color-bar">
-          <svg ${this._color === `blue` ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
+          <svg ${this._haveRepeatingDays ? `` : `class="card__color-bar-wave"`} width="100%" height="10">
             <use xlink:href="#wave"></use>
           </svg>
         </div>
@@ -106,32 +99,15 @@ export class Task extends Component {
         <div class="card__settings">
           <div class="card__details">
             <div class="card__dates">
-              <button class="card__date-deadline-toggle" type="button">
-              date: <span class="card__date-status">${this._isDeadline ? `yes` : `no`}</span>
-              </button>
-
-              <fieldset class="card__date-deadline" ${this._isDeadline ? `` : `disabled`}>
-              <label class="card__input-deadline-wrap">
-                <input
-                  class="card__date"
-                  type="text"
-                  placeholder="${formatDate(this._dueDate)}"
-                  name="date"
-                  value="${formatDate(this._dueDate)}"
-                />
-              </label>
-              <label class="card__input-deadline-wrap">
-                <input
-                  class="card__time"
-                  type="text"
-                  placeholder="11:15 PM"
-                  name="time"
-                  value="11:15 PM"
-                />
-              </label>
-              </fieldset>
+              <span class="card__date-status">
+                
+              </span>
             </div>
-
+            
+            <div class="card__dates">
+              ${moment(this._dueDate).format('DD MMMM HH:MM')}
+            </div>
+            
             <div class="card__hashtag">
               <div class="card__hashtag-list" ></div>
 

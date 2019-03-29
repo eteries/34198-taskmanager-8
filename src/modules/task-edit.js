@@ -5,6 +5,8 @@ import {ColorInput} from './color-input';
 import {DayInput} from './day-input';
 import {Component} from './common/component';
 
+import flatpickr from "flatpickr";
+
 export class TaskEdit extends Component {
   constructor(task, id) {
     super();
@@ -60,6 +62,11 @@ export class TaskEdit extends Component {
                  .addEventListener(`click`, this._onChangeDate);
     this._element.querySelector(`.card__repeat-toggle`)
                  .addEventListener(`click`, this._onChangeRepeated);
+
+    if (this._state.isDate) {
+      flatpickr(".card__date", { altInput: true, altFormat: "j F", dateFormat: "j F" });
+      flatpickr(".card__time", { enableTime: true, noCalendar: true, altInput: true, altFormat: "h:i K", dateFormat: "h:i K"});
+    }
   }
 
   removeListeners() {
@@ -151,7 +158,7 @@ export class TaskEdit extends Component {
 
   static createMapper(target) {
     return {
-      hashtag: (value) => target.tags.push(value),
+      hashtag: (value) => value && target.tags.push(value),
       text: (value) => target.title = value,
       color: (value) => target.color = value,
       repeat: (value) => target.repeatingDays.find((day) => day.label === value).checked = true,
@@ -282,6 +289,7 @@ export class TaskEdit extends Component {
           </div>
         </form>
       </article>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     `;
   }
 }

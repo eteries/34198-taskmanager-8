@@ -21,12 +21,6 @@ export const formatDate = (date) => {
   return `${day} ${months[monthNum]}`;
 };
 
-export const createFragment = (templateString) => {
-  const template = document.createElement(`template`);
-  template.innerHTML = templateString;
-  return template.content;
-};
-
 export const createElement = (templateString) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = templateString.trim();

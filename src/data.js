@@ -17,12 +17,12 @@ export const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
 const tags = [`homework`, `theory`, `practice`, `intensive`, `keks`, `doNotForget`];
 
 const days = [
-  {label: `md`, checked: true},
+  {label: `md`, checked: false},
   {label: `tu`, checked: false},
-  {label: `we`, checked: true},
+  {label: `we`, checked: false},
   {label: `th`, checked: false},
   {label: `fr`, checked: false},
-  {label: `sa`, checked: true},
+  {label: `sa`, checked: false},
   {label: `su`, checked: false},
 ];
 

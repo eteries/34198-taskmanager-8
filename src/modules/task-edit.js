@@ -1,11 +1,11 @@
 import {colors} from '../data';
-import {formatDate} from './common/utils';
 import {Tag} from './tag';
 import {ColorInput} from './color-input';
 import {DayInput} from './day-input';
 import {Component} from './common/component';
 
 import flatpickr from "flatpickr";
+import moment from "moment";
 
 export class TaskEdit extends Component {
   constructor(task, id) {
@@ -64,8 +64,8 @@ export class TaskEdit extends Component {
                  .addEventListener(`click`, this._onChangeRepeated);
 
     if (this._state.isDate) {
-      flatpickr(".card__date", { altInput: true, altFormat: "j F", dateFormat: "j F" });
-      flatpickr(".card__time", { enableTime: true, noCalendar: true, altInput: true, altFormat: "h:i K", dateFormat: "h:i K"});
+      flatpickr(`.card__date`, {altInput: true, altFormat: `j F`, dateFormat: `j F`});
+      flatpickr(`.card__time`, {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `"h:i K`});
     }
   }
 
@@ -142,7 +142,10 @@ export class TaskEdit extends Component {
 
     for (const pair of formData.entries()) {
       const [property, value] = pair;
-      taskEditMapper[property] && taskEditMapper[property](value);
+
+      if (taskEditMapper[property]) {
+        taskEditMapper[property](value);
+      }
     }
 
     return entry;
@@ -150,21 +153,28 @@ export class TaskEdit extends Component {
 
   update(data) {
     this._title = data.title;
-    this._tags = data.tags;
     this._color = data.color;
+    this._tags = data.tags;
     this._repeatingDays = data.repeatingDays;
     this._dueDate = data.dueDate;
   }
 
   static createMapper(target) {
     return {
-      hashtag: (value) => value && target.tags.push(value),
-      text: (value) => target.title = value,
-      color: (value) => target.color = value,
-      repeat: (value) => target.repeatingDays.find((day) => day.label === value).checked = true,
-      date: (value) => target.dueDate = value,
-
-    }
+      hashtag: (value) => value.trim() && target.tags.push(value),
+      text: (value) => {
+        target.title = value;
+      },
+      color: (value) => {
+        target.color = value;
+      },
+      repeat: (value) => {
+        target.repeatingDays.find((day) => day.label === value).checked = true;
+      },
+      date: (value) => {
+        target.dueDate = value;
+      },
+    };
   }
 
   get template() {
@@ -212,9 +222,9 @@ export class TaskEdit extends Component {
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${formatDate(this._dueDate)}"
+                    placeholder="${moment(this._dueDate).format(`DD MMMM`)}"
                     name="date"
-                    value="${formatDate(this._dueDate)}"
+                    value="${this._dueDate}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -289,7 +299,6 @@ export class TaskEdit extends Component {
           </div>
         </form>
       </article>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     `;
   }
 }

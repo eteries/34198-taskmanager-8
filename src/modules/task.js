@@ -61,6 +61,7 @@ export class Task extends Component {
     this._tags = data.tags;
     this._color = data.color;
     this._repeatingDays = data.repeatingDays;
+    this._dueDate = data.dueDate;
   }
 
   get template() {
@@ -87,27 +88,18 @@ export class Task extends Component {
         </div>
 
         <div class="card__textarea-wrap">
-          <label>
-            <textarea
+            <div
               class="card__text"
-              placeholder="Start typing your text here..."
-              name="text"
-            >${this._title}</textarea>
-          </label>
+            >${this._title}</div>
         </div>
 
         <div class="card__settings">
           <div class="card__details">
             <div class="card__dates">
               <span class="card__date-status">
-                
+                ${moment(this._dueDate).format(`DD MMMM HH:MM`)}
               </span>
-            </div>
-            
-            <div class="card__dates">
-              ${moment(this._dueDate).format('DD MMMM HH:MM')}
-            </div>
-            
+            </div>            
             <div class="card__hashtag">
               <div class="card__hashtag-list" ></div>
 

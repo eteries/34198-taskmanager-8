@@ -56,11 +56,19 @@ export class TaskEdit extends Component {
   createListeners() {
     this._element.querySelector(`.card__save`)
                  .addEventListener(`click`, this._onSubmitButtonClick);
+    this._element.querySelector(`.card__date-deadline-toggle`)
+                 .addEventListener(`click`, this._onChangeDate);
+    this._element.querySelector(`.card__repeat-toggle`)
+                 .addEventListener(`click`, this._onChangeRepeated);
   }
 
   removeListeners() {
     this._element.querySelector(`.card__save`)
                  .removeEventListener(`click`, this._onSubmitButtonClick);
+    this._element.querySelector(`.card__date-deadline-toggle`)
+                 .removeEventListener(`click`, this._onChangeDate);
+    this._element.querySelector(`.card__repeat-toggle`)
+                 .removeEventListener(`click`, this._onChangeRepeated);
   }
 
   _appendChildren() {
@@ -103,6 +111,7 @@ export class TaskEdit extends Component {
 
   _partialUpdate() {
     this._element.innerHTML = this.template;
+    this._appendChildren();
   }
 
   _processForm(formData) {
@@ -121,6 +130,15 @@ export class TaskEdit extends Component {
         {label: `su`, checked: false}
       ]
     };
+
+    const taskEditMapper = TaskEdit.createMapper(entry);
+
+    for (const pair of formData.entries()) {
+      const [property, value] = pair;
+      taskEditMapper[property] && taskEditMapper[property](value);
+    }
+
+    return entry;
   }
 
   update(data) {
@@ -129,6 +147,17 @@ export class TaskEdit extends Component {
     this._color = data.color;
     this._repeatingDays = data.repeatingDays;
     this._dueDate = data.dueDate;
+  }
+
+  static createMapper(target) {
+    return {
+      hashtag: (value) => target.tags.push(value),
+      text: (value) => target.title = value,
+      color: (value) => target.color = value,
+      repeat: (value) => target.repeatingDays.find((day) => day.label === value).checked = true,
+      date: (value) => target.dueDate = value,
+
+    }
   }
 
   get template() {
@@ -168,10 +197,10 @@ export class TaskEdit extends Component {
           <div class="card__details">
             <div class="card__dates">
               <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">${this._isDeadline ? `yes` : `no`}</span>
+                date: <span class="card__date-status">${this._state.isDate ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__date-deadline" ${this._isDeadline ? `` : `disabled`}>
+                <fieldset class="card__date-deadline" ${this._state.isDate ? `` : `disabled`}>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
@@ -193,12 +222,12 @@ export class TaskEdit extends Component {
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">no</span>
+                repeat:<span class="card__repeat-status">${this._state.isRepeated ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__repeat-days" disabled >
+                <fieldset class="card__repeat-days" ${this._state.isRepeated ? `` : `disabled`}>
                     <div class="card__repeat-days-inner"></div>
-                  </fieldset>
+                </fieldset>
                 </div>
 
                 <div class="card__hashtag">
@@ -208,7 +237,7 @@ export class TaskEdit extends Component {
                     <input
                       type="text"
                       class="card__hashtag-input"
-                      name="hashtag-input"
+                      name="hashtag"
                       placeholder="Type new hashtag here"
                     />
                   </label>

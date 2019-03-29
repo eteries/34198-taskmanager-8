@@ -13,7 +13,7 @@ export class Tag extends Component {
       <input
         type="hidden"
         name="hashtag"
-        value="repeat"
+        value="${this._name}"
         class="card__hashtag-hidden-input"
       />
       <button type="button" class="card__hashtag-name">

@@ -63,6 +63,13 @@ export class Task extends Component {
     this._repeatingDays = data.repeatingDays;
   }
 
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._repeatingDays = data.repeatingDays;
+  }
+
   get template() {
     return `
 <article class="card card--${this._color} ${this._isDeadline ? `card--deadline` : ``}">

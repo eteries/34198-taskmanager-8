@@ -70,7 +70,7 @@ export class TaskEdit extends Component {
       );
       flatpickr(
           this._element.querySelector(`.card__time`),
-          {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `h:i K`, defaultHour: 0, defaultMinute: 0}
+          {enableTime: true, noCalendar: true, altInput: true, altFormat: `H:i`, dateFormat: `H:i`, defaultDate: new Date()}
       );
     }
   }
@@ -182,8 +182,8 @@ export class TaskEdit extends Component {
       },
       time: (value) => {
         const newDate = moment(target.dueDate, `DD MMMM`);
-        newDate.set(`hours`, (moment(value, `h:m A`).hours()));
-        newDate.set(`minutes`, (moment(value, `h:m A`).minutes()));
+        newDate.set(`hours`, (moment(value, `h:mm`).hours()));
+        newDate.set(`minutes`, (moment(value, `h:mm`).minutes()));
         target.dueDate = newDate.valueOf();
       }
     };
@@ -245,7 +245,7 @@ export class TaskEdit extends Component {
                     type="text"
                     placeholder="11:15 PM"
                     name="time"
-                    value="${moment(this._dueDate).format(`HH:mm A`)}"
+                    value="${moment(this._dueDate).format(`h:mm`)}"
                   />
                 </label>
               </fieldset>

@@ -66,11 +66,11 @@ export class TaskEdit extends Component {
     if (this._state.isDate) {
       flatpickr(
           this._element.querySelector(`.card__date`),
-          {altInput: true, altFormat: `j F`, dateFormat: `j F`, defaultDate: new Date()}
+          {altInput: true, altFormat: `j F`, dateFormat: `j F`, defaultDate: this._dueDate || new Date()}
       );
       flatpickr(
           this._element.querySelector(`.card__time`),
-          {enableTime: true, noCalendar: true, altInput: true, altFormat: `H:i`, dateFormat: `H:i`, defaultDate: new Date()}
+          {enableTime: true, noCalendar: true, altInput: true, altFormat: `H:i`, dateFormat: `H:i`, defaultDate: this._dueDate || new Date()}
       );
     }
   }
@@ -236,7 +236,7 @@ export class TaskEdit extends Component {
                     type="text"
                     placeholder="${moment(this._dueDate).format(`DD MMMM`)}"
                     name="date"
-                    value="${moment(this._dueDate)}"
+                    value="${this._dueDate}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -245,7 +245,7 @@ export class TaskEdit extends Component {
                     type="text"
                     placeholder="11:15 PM"
                     name="time"
-                    value="${moment(this._dueDate).format(`h:mm`)}"
+                    value="${this._dueDate}"
                   />
                 </label>
               </fieldset>

@@ -64,8 +64,14 @@ export class TaskEdit extends Component {
                  .addEventListener(`click`, this._onChangeRepeated);
 
     if (this._state.isDate) {
-      flatpickr(`.card__date`, {altInput: true, altFormat: `j F`, dateFormat: `j F`});
-      flatpickr(`.card__time`, {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `"h:i K`});
+      flatpickr(
+          this._element.querySelector(`.card__date`),
+          {altInput: true, altFormat: `j F`, dateFormat: `j F`}
+      );
+      flatpickr(
+          this._element.querySelector(`.card__time`),
+          {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `"h:i K`}
+      );
     }
   }
 
@@ -124,7 +130,7 @@ export class TaskEdit extends Component {
   _processForm(formData) {
     const entry = {
       title: ``,
-      color: ``,
+      color: `blue`,
       tags: [],
       dueDate: new Date(),
       repeatingDays: [

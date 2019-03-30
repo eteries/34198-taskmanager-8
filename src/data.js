@@ -8,7 +8,6 @@ const taskTitles = [
 
 const MAX_TAGS_NUM = 3;
 const MIN_TASKS_NUM = 1;
-const RECENT_WEEKS_NUM = 2;
 export const MAX_TASKS_NUMBER = 100;
 export const INITIAL_TASKS_NUMBER = 7;
 
@@ -26,14 +25,9 @@ const days = [
   {label: `su`, checked: false},
 ];
 
-const getRandomRecentDate = () => {
-  const WEEK = 7 * 24 * 60 * 60 * 1000;
-  return Date.now() - WEEK + Math.floor(Math.random() * RECENT_WEEKS_NUM * WEEK);
-};
-
 export const getTask = () => ({
   title: taskTitles[Math.floor(Math.random() * taskTitles.length)],
-  date: getRandomRecentDate(),
+  date: null,
   tags: tags.splice(0, Math.ceil(Math.random() * MAX_TAGS_NUM)),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   color: colors[Math.floor(Math.random() * colors.length)],

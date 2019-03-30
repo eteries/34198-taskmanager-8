@@ -21,7 +21,7 @@ export class TaskEdit extends Component {
     this._color = task.color;
 
     this._state = {};
-    this._state.isDate = false;
+    this._state.isDate = !!task.dueDate;
     this._state.isRepeated = false;
 
     this._onChangeDate = this._onChangeDate.bind(this);
@@ -66,11 +66,11 @@ export class TaskEdit extends Component {
     if (this._state.isDate) {
       flatpickr(
           this._element.querySelector(`.card__date`),
-          {altInput: true, altFormat: `j F`, dateFormat: `j F`}
+          {altInput: true, altFormat: `j F`, dateFormat: `j F`, defaultDate: new Date()}
       );
       flatpickr(
           this._element.querySelector(`.card__time`),
-          {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `"h:i K`}
+          {enableTime: true, noCalendar: true, altInput: true, altFormat: `h:i K`, dateFormat: `h:i K`, defaultHour: 0, defaultMinute: 0}
       );
     }
   }
@@ -180,6 +180,12 @@ export class TaskEdit extends Component {
       date: (value) => {
         target.dueDate = value;
       },
+      time: (value) => {
+        const newDate = moment(target.dueDate, `DD MMMM`);
+        newDate.set(`hours`, (moment(value, `h:m A`).hours()));
+        newDate.set(`minutes`, (moment(value, `h:m A`).minutes()));
+        target.dueDate = newDate.valueOf();
+      }
     };
   }
 
@@ -230,7 +236,7 @@ export class TaskEdit extends Component {
                     type="text"
                     placeholder="${moment(this._dueDate).format(`DD MMMM`)}"
                     name="date"
-                    value="${this._dueDate}"
+                    value="${moment(this._dueDate)}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
@@ -239,7 +245,7 @@ export class TaskEdit extends Component {
                     type="text"
                     placeholder="11:15 PM"
                     name="time"
-                    value="11:15 PM"
+                    value="${moment(this._dueDate).format(`HH:mm A`)}"
                   />
                 </label>
               </fieldset>
